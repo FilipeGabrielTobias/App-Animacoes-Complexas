@@ -5,7 +5,7 @@ class InputField extends StatelessWidget {
   final bool obscure;
   final IconData icon;
 
-  const InputField({Key? key, required this.hint, required this.obscure, required this.icon}) : super(key: key);
+  const InputField({this.hint, this.obscure, this.icon});
 
   @override
   Widget build(BuildContext context) {
