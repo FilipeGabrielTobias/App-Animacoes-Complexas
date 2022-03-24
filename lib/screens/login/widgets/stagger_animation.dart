@@ -35,7 +35,10 @@ class StaggerAnimation extends StatelessWidget {
         onTap: () {
           controller.forward();
         },
-        child: _buildChild(context) 
+        child: Hero(
+          tag: 'fade',
+          child: _buildChild(context)
+        ) 
       ),
     );
   }

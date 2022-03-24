@@ -1,6 +1,7 @@
 import 'package:animacoes_complexas/screens/home/widgets/animated_list_view.dart';
 import 'package:flutter/material.dart';
 
+import 'fade_container.dart';
 import 'home_top.dart';
 
 class StaggerAnimation extends StatelessWidget {
@@ -8,6 +9,7 @@ class StaggerAnimation extends StatelessWidget {
   final AnimationController controller;
   final Animation<double> containerGrow;
   final Animation<EdgeInsets> listSlidePosition;
+  final Animation<Color> fadeAnimation;
 
   StaggerAnimation({@required this.controller}) : 
     containerGrow = CurvedAnimation(
@@ -26,31 +28,47 @@ class StaggerAnimation extends StatelessWidget {
           curve: Curves.ease
         )
       )
+    ),
+    fadeAnimation = ColorTween(
+      begin: const Color.fromRGBO(247, 64, 106, 1.0),
+      end: const Color.fromRGBO(247, 64, 106, 0.0)
+    ).animate(
+      CurvedAnimation(
+        parent: controller, 
+        curve: Curves.decelerate
+      )
     );
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: AnimatedBuilder(
-          animation: controller,
-          builder: _buildAnimation,
-        ),
+      body: AnimatedBuilder(
+        animation: controller,
+        builder: _buildAnimation,
       ),
     );
   }
 
   Widget _buildAnimation(BuildContext context, Widget child) {
-    return ListView(
-      padding: EdgeInsets.zero,
+    return Stack(
       children: <Widget>[
-        HomeTop(
-          containerGrow: containerGrow
+        ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            HomeTop(
+              containerGrow: containerGrow
+            ),
+            AnimatedListView(
+              listSlidePosition: listSlidePosition
+            )
+          ],
         ),
-        AnimatedListView(
-          listSlidePosition: listSlidePosition
+        IgnorePointer(
+          child: FadeContainer(
+            fadeAnimation: fadeAnimation,
+          ),
         )
-      ],
+      ]
     );
   }
 }
